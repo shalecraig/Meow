@@ -71,10 +71,14 @@
         title,
         message,
         icon,
+        external,
         message_type;
 
       if (typeof options.title === 'string') {
         title = options.title;
+      }
+      if (typeof options.external === 'string') {
+        external = options.external;
       }
       if (typeof options.message === 'string') {
         message_type = 'string';
@@ -106,12 +110,35 @@
         trigger: trigger,
         message: message,
         icon: icon,
+        external: external,
         message_type: message_type
       }
     },
     createMessage: function (options) {
-      var meow = new Meow(options);
-      meows[meow.timestampe] = meow;
+      if (typeof options.external === 'string' && options.external == 'true') {
+        this.createExtMessage(options);
+      } else {
+	   var meow = new Meow(options);
+	   meows[meow.timestampe] = meow;
+	 }
+    },
+    createExtMessage: function (options) {
+      if (window.webkitNotifications && typeof options.external === 'string' && options.external == 'true') {
+        if (window.webkitNotifications.checkPermission() ==0) {
+          if (typeof options.icon === 'undefined' ) {
+            window.webkitNotifications.createNotification(options.title, options.message).show();
+          } else {
+            window.webkitNotifications.createNotification(options.icon, options.title, options.message).show();
+          }
+        } else {
+          window.webkitNotifications.requestPermission();
+          options.external = "false";
+          this.createMessage(options);
+        }
+      } else {
+        options.external = "false";
+        this.createMessage(options);
+      }
     }
   };
 
