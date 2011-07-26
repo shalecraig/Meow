@@ -40,6 +40,12 @@
             icon: 'nyan-cat.gif'
           });
         });
+        $('#external').click(function () {
+          $(document).meow({
+            message: 'I\'m an unbound meow!',
+            external: 'true',
+          });
+        });
       });
     </script>
   </head>
@@ -76,5 +82,8 @@
     <h2>Unbound Demo</h2>
     <p>This one isn't bound to an event. We just call <code>$.meow()</code> without a trigger.</p>
     <p><button id="unbound">Click me!</button></p>
+    <h2>External Demo</h2>
+    <p>This one isn't natively external. We just call <code>$.meow()</code> with a param of external set to true. It tries to make an external notification, but gracefully degrades to "Meow".</p>
+    <p><button id="external">Click me!</button></p>
   </body>
 </html>
