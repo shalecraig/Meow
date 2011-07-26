@@ -119,7 +119,7 @@
         this.createExtMessage(options);
       } else {
 	   var meow = new Meow(options);
-	   meows[meow.timestampe] = meow;
+	   meows[meow.timestamp] = meow;
 	 }
     },
     createExtMessage: function (options) {
