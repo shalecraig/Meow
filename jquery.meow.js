@@ -10,7 +10,7 @@
     this.message = options.message;
     this.icon = options.icon;
     this.timestamp = Date.now();
-    this.duration = 2400;
+    this.duration = options.duration || 2400;
     this.hovered = false;
     this.manifest = {};
     $('#meows').append($(document.createElement('div'))
@@ -72,7 +72,12 @@
         message,
         icon,
         external,
+        duration,
         message_type;
+      
+      if (typeof options.duration == 'number' || typeof options.duration == 'string') {
+        duration = parseFloat(options.duration);
+      }
 
       if (typeof options.title === 'string') {
         title = options.title;
@@ -110,6 +115,7 @@
         trigger: trigger,
         message: message,
         icon: icon,
+        duration: duration,
         external: external,
         message_type: message_type
       }

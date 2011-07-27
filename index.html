@@ -40,6 +40,13 @@
             icon: 'nyan-cat.gif'
           });
         });
+        $('#duration').click(function () {
+          $(document).meow({
+            message: 'I\'m a variable duration meow!',
+            duration: 10000,
+            icon: 'nyan-cat.gif'
+          });
+        });
         $('#external').click(function () {
           $(document).meow({
             message: 'I\'m an unbound meow!',
@@ -85,5 +92,8 @@
     <h2>External Demo</h2>
     <p>This one isn't natively external. We just call <code>$.meow()</code> with a param of external set to true. It tries to make an external notification, but gracefully degrades to "Meow".</p>
     <p><button id="external">Click me!</button></p>
+    <h2>Variable Duration Demo</h2>
+    <p>This one has a variable time set to it. We just call <code>$.meow()</code> with a param of duration set to 10s. It will make the notification stay around for 10 seconds.</p>
+    <p><button id="duration">Click me!</button></p>
   </body>
 </html>
