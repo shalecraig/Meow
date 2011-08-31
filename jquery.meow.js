@@ -144,6 +144,10 @@
         );
       }
 
+      if (typeof options.afterCreate === 'function') {
+        options.afterCreate.call(that);
+      }
+
       this.manifest.bind('mouseenter mouseleave', function (event) {
         if (event.type === 'mouseleave') {
           that.hovered = false;
