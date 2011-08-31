@@ -148,6 +148,12 @@
         options.afterCreate.call(that);
       }
 
+      if (typeof options.onClick === 'function') {
+        this.manifest.click(function() {
+          options.onClick.call(that);
+        });
+      }
+
       this.manifest.bind('mouseenter mouseleave', function (event) {
         if (event.type === 'mouseleave') {
           that.hovered = false;
