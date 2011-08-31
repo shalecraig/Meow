@@ -23,6 +23,7 @@
 
 (function ($) {
   'use strict';
+<<<<<<< HEAD
   var this_meow,
     meows = {},
     Meow = function (options) {
@@ -31,9 +32,92 @@
       this.timestamp = Date.now();  // used to identify this meow and timeout
       this.hovered = false;         // whether mouse is over or not
       this.manifest = {};           // stores the DOM object of this meow
+=======
+
+  var meows = {},
+    methods = {};
+
+  function Meow(options) {
+    var that = this;
+    this.title = options.title
+    this.message = options.message;
+    this.icon = options.icon;
+    this.timestamp = Date.now();
+    this.duration = options.duration || 2400;
+    this.hovered = false;
+    this.manifest = {};
+    $('#meows').append($(document.createElement('div'))
+      .attr('id', 'meow-' + this.timestamp)
+      .addClass('meow')
+      .html($(document.createElement('div')).addClass('inner').text(this.message))
+      .hide()
+      .fadeIn(400));
+
+    this.manifest = $('#meow-' + this.timestamp);
+
+    if (typeof this.title === 'string') {
+      this.manifest.find('.inner').prepend(
+        $(document.createElement('h1')).text(this.title)
+      );
+    }
+
+    if (typeof that.icon === 'string') {
+      this.manifest.find('.inner').prepend(
+        $(document.createElement('div')).addClass('icon').html(
+          $(document.createElement('img')).attr('src', this.icon)
+        )
+      );
+    }
+
+    this.manifest.bind('mouseenter mouseleave', function (event) {
+      if (event.type === 'mouseleave') {
+        that.hovered = false;
+        that.manifest.removeClass('hover');
+        if (that.timestamp + that.duration <= Date.now()) {
+          that.destroy();
+        }
+      } else {
+        that.hovered = true;
+        that.manifest.addClass('hover');
+      }
+    });
+
+    this.timeout = setTimeout(function () {
+      if (that.hovered !== true && typeof that === 'object') {
+        that.destroy();
+      }
+    }, that.duration);
+
+    this.destroy = function () {
+      that.manifest.find('.inner').fadeTo(400, 0, function () {
+        that.manifest.slideUp(function () {
+          that.manifest.remove();
+          delete meows[that.timestamp];
+        });
+      });
+    };
+  }
+
+  methods = {
+    configMessage: function (options) {
+      var trigger,
+        title,
+        message,
+        icon,
+        external,
+        duration,
+        message_type;
+      
+      if (typeof options.duration == 'number' || typeof options.duration == 'string') {
+        duration = parseFloat(options.duration);
+      }
+>>>>>>> 39025fc12328868b7a04b3911ab2f47d69b51550
 
       if (typeof options.title === 'string') {
         this.title = options.title;
+      }
+      if (typeof options.external === 'string') {
+        external = options.external;
       }
       if (typeof options.message === 'string') {
         message_type = 'string';
@@ -63,6 +147,7 @@
       if (typeof options.icon === 'string') {
         this.icon = options.icon;
       }
+<<<<<<< HEAD
 
       this.duration = options.duration || 5000;
 
@@ -80,6 +165,44 @@
           $(document.createElement('h1')).text(this.title)
         );
       }
+=======
+      return {
+        trigger: trigger,
+        message: message,
+        icon: icon,
+        duration: duration,
+        external: external,
+        message_type: message_type
+      }
+    },
+    createMessage: function (options) {
+      if (typeof options.external === 'string' && options.external == 'true') {
+        this.createExtMessage(options);
+      } else {
+	   var meow = new Meow(options);
+	   meows[meow.timestamp] = meow;
+	 }
+    },
+    createExtMessage: function (options) {
+      if (window.webkitNotifications && typeof options.external === 'string' && options.external == 'true') {
+        if (window.webkitNotifications.checkPermission() ==0) {
+          if (typeof options.icon === 'undefined' ) {
+            window.webkitNotifications.createNotification(options.title, options.message).show();
+          } else {
+            window.webkitNotifications.createNotification(options.icon, options.title, options.message).show();
+          }
+        } else {
+          window.webkitNotifications.requestPermission();
+          options.external = "false";
+          this.createMessage(options);
+        }
+      } else {
+        options.external = "false";
+        this.createMessage(options);
+      }
+    }
+  };
+>>>>>>> 39025fc12328868b7a04b3911ab2f47d69b51550
 
       if (typeof that.icon === 'string') {
         this.manifest.find('.inner').prepend(
